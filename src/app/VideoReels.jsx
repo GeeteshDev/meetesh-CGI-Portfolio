@@ -70,7 +70,7 @@ const VideoReels = () => {
                     <video
                         ref={(el) => (videoRefs.current[index] = el)}
                         src={videoSrc}
-                        className="w-full h-full object-cover rounded-lg shadow-lg"
+                        className="w-full h-full object-contain rounded-lg shadow-lg"
                         loop
                         muted
                         onClick={() => handleVideoClick(index)}
