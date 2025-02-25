@@ -36,7 +36,6 @@ const VideoReels = () => {
 
     return (
         <div className="w-screen h-screen overflow-y-auto bg-black snap-y snap-mandatory">
-            <h1 className="text-white text-3xl font-bold text-center my-6">CGI Videos</h1>
 
             {videos.map((videoSrc, index) => (
                 <div 
