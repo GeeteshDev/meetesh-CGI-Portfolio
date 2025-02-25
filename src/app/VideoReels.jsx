@@ -21,11 +21,7 @@ const VideoReels = () => {
                 if (iframe) {
                     const rect = iframe.parentElement.getBoundingClientRect();
                     const isVisible = rect.top >= 0 && rect.bottom <= viewportHeight;
-                    if (isVisible) {
-                        iframe.src = `${videos[index]}&autoplay=1`;
-                    } else {
-                        iframe.src = `${videos[index]}&autoplay=0`; 
-                    }
+                    iframe.src = isVisible ? `${videos[index]}&autoplay=1` : `${videos[index]}&autoplay=0`; 
                 }
             });
         };
@@ -36,6 +32,7 @@ const VideoReels = () => {
 
     return (
         <div className="w-screen h-screen overflow-y-auto bg-black snap-y snap-mandatory">
+            <h1 className="text-white text-3xl font-bold text-center my-6">CGI Videos</h1>
 
             {videos.map((videoSrc, index) => (
                 <div 
@@ -43,8 +40,8 @@ const VideoReels = () => {
                     ref={(el) => (videoRefs.current[index] = el)}
                     className="relative w-full h-screen flex justify-center items-center snap-start"
                 >
-                    {/* Aspect Ratio Wrapper */}
-                    <div className="relative w-full h-full">
+                    {/* Aspect Ratio Wrapper for Responsive Sizing */}
+                    <div className="relative w-full h-full overflow-hidden">
                         <iframe
                             src={`${videoSrc}&autoplay=0`} 
                             frameBorder="0"
