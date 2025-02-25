@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 const videos = [
     "https://player.vimeo.com/video/1060097601?h=90479e3c78&title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479",
@@ -16,13 +16,15 @@ const VideoReels = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            videoRefs.current.forEach((player, index) => {
-                if (player) {
-                    const rect = player.getBoundingClientRect();
-                    if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
-                        player.src = `${videos[index]}&autoplay=1`; // Autoplay when in view
+            const viewportHeight = window.innerHeight;
+            videoRefs.current.forEach((iframe, index) => {
+                if (iframe) {
+                    const rect = iframe.parentElement.getBoundingClientRect();
+                    const isVisible = rect.top >= 0 && rect.bottom <= viewportHeight;
+                    if (isVisible) {
+                        iframe.src = `${videos[index]}&autoplay=1`;
                     } else {
-                        player.src = `${videos[index]}&autoplay=0`; // Pause when out of view
+                        iframe.src = `${videos[index]}&autoplay=0`; 
                     }
                 }
             });
@@ -33,23 +35,25 @@ const VideoReels = () => {
     }, []);
 
     return (
-        <div className="w-screen h-screen overflow-y-auto bg-black flex flex-col items-center">
-            <h1 className="text-white text-3xl font-bold my-6">CGI Videos</h1>
+        <div className="w-screen h-screen overflow-y-auto bg-black snap-y snap-mandatory">
+            <h1 className="text-white text-3xl font-bold text-center my-6">CGI Videos</h1>
 
             {videos.map((videoSrc, index) => (
                 <div 
                     key={index} 
                     ref={(el) => (videoRefs.current[index] = el)}
-                    className="relative w-full h-screen flex justify-center items-center snap-center overflow-hidden"
+                    className="relative w-full h-screen flex justify-center items-center snap-start"
                 >
-                    {/* Vimeo Iframe without extra play button */}
-                    <iframe
-                        src={`${videoSrc}&autoplay=0`} // Autoplay handled by scroll
-                        frameBorder="0"
-                        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-                        className="absolute top-0 left-0 w-full h-full"
-                        title={`video-${index}`}
-                    ></iframe>
+                    {/* Aspect Ratio Wrapper */}
+                    <div className="relative w-full h-full">
+                        <iframe
+                            src={`${videoSrc}&autoplay=0`} 
+                            frameBorder="0"
+                            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+                            className="absolute top-0 left-0 w-full h-full"
+                            title={`video-${index}`}
+                        ></iframe>
+                    </div>
                 </div>
             ))}
         </div>
