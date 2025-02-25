@@ -6,6 +6,10 @@ import { Play } from "lucide-react";
 const videos = [
     "/videos/video-1.mp4",
     "/videos/video-2.mp4",
+    "/videos/video-3.mp4",
+    "/videos/video-4.mp4",
+    "/videos/video-5.mp4",
+    "/videos/video-6.mp4",
 ];
 
 const VideoReels = () => {
@@ -29,8 +33,10 @@ const VideoReels = () => {
                 videoRefs.current.forEach((video, index) => {
                     if (index === foundIndex) {
                         video.play();
+                        setShowPlayButton((prev) => prev.map((_, i) => i !== index));
                     } else {
                         video.pause();
+                        setShowPlayButton((prev) => prev.map((_, i) => i === index));
                     }
                 });
             }
@@ -45,7 +51,7 @@ const VideoReels = () => {
         if (video.paused) {
             video.play();
             setPlayingIndex(index);
-            setShowPlayButton((prev) => prev.map((val, i) => (i === index ? false : val)));
+            setShowPlayButton((prev) => prev.map((_, i) => i !== index));
         }
     };
 
@@ -53,7 +59,7 @@ const VideoReels = () => {
         const video = videoRefs.current[index];
         if (!video.paused) {
             video.pause();
-            setShowPlayButton((prev) => prev.map((val, i) => (i === index ? true : val)));
+            setShowPlayButton((prev) => prev.map((_, i) => i === index));
         }
     };
 
